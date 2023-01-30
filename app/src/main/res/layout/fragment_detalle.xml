@@ -8,5 +8,6 @@
         android:id="@+id/txtDetalle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25sp"/>
+        android:textSize="25sp"
+        android:text="hola"/>
 </LinearLayout>

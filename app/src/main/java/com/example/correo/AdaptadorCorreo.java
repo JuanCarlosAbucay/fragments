@@ -13,10 +13,14 @@ import java.util.List;
 
 public class AdaptadorCorreo extends RecyclerView.Adapter<AdaptadorCorreo.ViewHolder> {
     private final List<Correo> correos;
+    CorreosListener listener;
     public AdaptadorCorreo(List<Correo> correos) {
         this.correos = correos;
     }
-
+    public AdaptadorCorreo(List<Correo> correos, CorreosListener listener){
+        this.correos = correos;
+        this.listener = listener;
+    }
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView de;
         TextView asunto;
@@ -26,6 +30,12 @@ public class AdaptadorCorreo extends RecyclerView.Adapter<AdaptadorCorreo.ViewHo
             de = (TextView) view.findViewById(R.id.delbl);
             asunto = (TextView) view.findViewById(R.id.asuntolbl);
         }
+
+        public void bindCorreo(Correo correo){
+            de.setText(correo.getDe());
+            asunto.setText(correo.getAsunto());
+        }
+
         public TextView getDeLbl() {
             return de;
         }
@@ -43,12 +53,13 @@ public class AdaptadorCorreo extends RecyclerView.Adapter<AdaptadorCorreo.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, @SuppressLint("RecyclerView") int position) {
-        viewHolder.getDeLbl().setText(correos.get(position).getDe());
-        viewHolder.getAsuntoLbl().setText(correos.get(position).getAsunto());
+        Correo correo = correos.get(position);
+        Log.d("Text", correo.texto);
+        viewHolder.bindCorreo(correo);
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(correos.get(position).de, correos.get(position).asunto);
+                listener.onCorreoSeleccionado(correo);
             }
         });
     }
@@ -57,4 +68,5 @@ public class AdaptadorCorreo extends RecyclerView.Adapter<AdaptadorCorreo.ViewHo
     public int getItemCount() {
         return correos.size();
     }
+
 }

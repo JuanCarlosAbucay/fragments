@@ -1,7 +1,10 @@
 package com.example.correo;
 
+import android.location.GnssAntennaInfo;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +17,8 @@ import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class FragmentListado extends Fragment {
     private static RecyclerView lstListado;
@@ -26,7 +31,14 @@ public class FragmentListado extends Fragment {
         for (int i = 0; i < 10; i++) {
             datos.add(new Correo("Persona " + i, "Asunto del correo " + i, "Texto del correo" + i));
         }
-        AdaptadorCorreo adaptador = new AdaptadorCorreo(datos);
+        AdaptadorCorreo adaptador = new AdaptadorCorreo(datos, new CorreosListener() {
+            @Override
+            public void onCorreoSeleccionado(Correo correo) {
+                if (listener != null){
+                    listener.onCorreoSeleccionado(correo);
+                }
+            }
+        });
         lstListado = getView().findViewById(R.id.lstListado);
         lstListado.setLayoutManager(new LinearLayoutManager(this.getContext()));
         lstListado.addItemDecoration(new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL));
@@ -43,7 +55,13 @@ public class FragmentListado extends Fragment {
         listener = l;
     }
 
-    public void setCorreosListener(){
-
+    public void setCorreosListener(Consumer<Correo> seleccion){
+        listener = new CorreosListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onCorreoSeleccionado(Correo correo) {
+                seleccion.accept(correo);
+            }
+        };
     }
 }

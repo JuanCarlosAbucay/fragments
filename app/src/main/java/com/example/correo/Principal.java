@@ -12,15 +12,18 @@ public class Principal extends AppCompatActivity {
         super.onCreate(onSavedInstanceState);
         setContentView(R.layout.activity_main);
         FragmentListado frgListado = (FragmentListado) getSupportFragmentManager().findFragmentById(R.id.frgListado);
-        frgListado.setCorreosListener(correo -> {
-            FragmentDetalle frgDetalle = (FragmentDetalle) getSupportFragmentManager().findFragmentById(R.id.frgDetalle);
-            if (frgDetalle != null){
-                frgDetalle.mostrarDetall(correo.texto);
-            }
-            else {
-                Intent i = new Intent(this, DetalleActivity.class);
-                i.putExtra(DetalleActivity.EXTRA_TEXTO, correo.texto);
-                startActivity(i);
+        frgListado.setCorreosListener(new CorreosListener() {
+            @Override
+            public void onCorreoSeleccionado(Correo correo) {
+                FragmentDetalle frgDetalle = (FragmentDetalle) getSupportFragmentManager().findFragmentById(R.id.frgDetalle);
+                if (frgDetalle != null){
+                    frgDetalle.mostrarDetall(correo.texto);
+                }
+                else {
+                    Intent i = new Intent(getApplicationContext(), DetalleActivity.class);
+                    i.putExtra(DetalleActivity.EXTRA_TEXTO, correo.texto);
+                    startActivity(i);
+                }
             }
         });
     }

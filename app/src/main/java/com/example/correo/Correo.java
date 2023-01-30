@@ -8,6 +8,7 @@ public class Correo {
     public Correo(String de, String asunto, String texto){
         this.de = de;
         this.asunto = asunto;
+        this.texto = texto;
     }
 
     public String getDe() {
@@ -17,4 +18,5 @@ public class Correo {
     public String getAsunto() {
         return asunto;
     }
+    public String getTexto() {return texto;}
 }
